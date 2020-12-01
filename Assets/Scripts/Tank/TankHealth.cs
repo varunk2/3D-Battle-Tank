@@ -36,15 +36,13 @@ public class TankHealth : MonoBehaviour
         _currentHealth -= damage;
         SetHealthUI();
 
-        if(_currentHealth <= 0f && !_dead) {
+        if(_currentHealth <= 0f) {
             OnDeath();
         }
 
     }
 
     private void OnDeath() {
-
-        _dead = true;
 
         _explosionParticles.transform.position = transform.position;
         _explosionParticles.gameObject.SetActive(true);
