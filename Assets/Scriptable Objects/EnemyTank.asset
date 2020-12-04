@@ -17,5 +17,5 @@ MonoBehaviour:
   speed: 10
   turnSpeed: 180
   health: 100
-  damage: 2
+  damage: 50
   mass: 500
