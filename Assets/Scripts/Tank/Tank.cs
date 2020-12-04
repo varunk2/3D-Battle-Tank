@@ -19,17 +19,23 @@ public class Tank : MonoBehaviour
     private float _startingHealth;
     private float _currentHealth;
     private float _damage;
-    private bool _dead;
+    private float _mass;
+
+    [SerializeField] private MeshRenderer[] _meshRenderers;
 
     public void Intialize(TankScriptableObject config) {
         _tankSpeed = config.speed;
         _turnSpeed = config.turnSpeed;
         _currentHealth = _startingHealth = config.health;
         _damage = config.damage;
-        
+        _mass = config.mass;
+
+        foreach (MeshRenderer mesh in _meshRenderers) {
+            mesh.material.color = config.tankColor;
+        }
+
         SetHealthUI();
     }
-
     private void Awake() {
         _rigidBody = GetComponent<Rigidbody>();
 
@@ -37,11 +43,10 @@ public class Tank : MonoBehaviour
 
         _explosionParticles.gameObject.SetActive(false);
 
-        _dead = false;
-
     }
-
     private void Update() {
+        _rigidBody.mass = _mass;
+
         Movement();
         Turn();
     }
@@ -61,7 +66,6 @@ public class Tank : MonoBehaviour
             _rigidBody.MoveRotation(_rigidBody.rotation * rotation);
         }
     }
-
     public void TakeDamage() {
 
         _currentHealth -= _damage;
@@ -72,7 +76,6 @@ public class Tank : MonoBehaviour
         }
 
     }
-
     private void OnDeath() {
 
         _explosionParticles.transform.position = transform.position;
@@ -80,13 +83,12 @@ public class Tank : MonoBehaviour
 
         _explosionParticles.Play();
         gameObject.SetActive(false);
-        //StartCoroutine(DelayDeath());
+        StartCoroutine(DelayDeath());
     }
-    //IEnumerator DelayDeath() {
-    //    yield return new WaitForSeconds(_explosionParticles.main.duration);
-    //    gameObject.SetActive(false);
-    //}
-
+    IEnumerator DelayDeath() {
+        yield return new WaitForSeconds(_explosionParticles.main.duration);
+        gameObject.SetActive(false);
+    }
     private void SetHealthUI() {
 
         slider.value = _currentHealth;

@@ -55,9 +55,10 @@ public class TankShootingController : MonoBehaviour
     private void Fire() {
         _fired = true;
 
-        Rigidbody shellInstance = Instantiate(shell, fireTransform.position, fireTransform.rotation) as Rigidbody;
+        //Rigidbody shellInstance = Instantiate(shell, fireTransform.position, fireTransform.rotation) as Rigidbody;
+        ShellController shellInstance = ShellManager.Instance.GetShell();
 
-        shellInstance.velocity = _currentLaunchForce * fireTransform.forward;
+        //shellInstance.velocity = _currentLaunchForce * fireTransform.forward;
 
         _currentLaunchForce = minLaunchForce;
     }
